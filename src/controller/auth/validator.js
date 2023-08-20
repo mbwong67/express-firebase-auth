@@ -1,8 +1,7 @@
-import {validator} from '../../utils'
 import joi from 'joi'
 
 module.exports = {
-    registerValidation: (data) => {
+    registerValidation: (data, options) => {
         const schema = joi.object({
             name: joi.string().min(6).required(),
             email: joi.string().min(6).required().email(),
@@ -10,14 +9,14 @@ module.exports = {
             repeat_password: joi.ref('password'),
         })
 
-        return schema.validate(data);
+        return schema.validate(data, options);
     },
-    loginValidation: (data) => {
-        const schema = validator.object({
+    loginValidation: (data, options) => {
+        const schema = joi.object({
             email: joi.string().min(6).required().email(),
             password: joi.string().min(6).required(),
         })
 
-        return schema.validate(data);
+        return schema.validate(data, options);
     }
 }
