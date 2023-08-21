@@ -1,12 +1,8 @@
-import {initializeApp} from 'firebase/app';
-import {getFirestore} from 'firebase/firestore';
-import config from '../config';
-
-const firebaseConfig = config.firebaseConfig;
-
-const firebaseApp = initializeApp(firebaseConfig);
-const db = getFirestore(firebaseApp)
-
+import db from './firebase';
+import logger from './logger';
+import jwt from './jwt';
 module.exports = {
     db: db,
+    ...logger,
+    jwt: jwt
 }

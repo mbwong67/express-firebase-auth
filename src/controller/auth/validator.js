@@ -7,7 +7,7 @@ module.exports = {
             email: joi.string().min(6).required().email(),
             password: joi.string().min(6).required(),
             repeat_password: joi.ref('password'),
-        })
+        }).with('password', 'repeat_password');
 
         return schema.validate(data, options);
     },

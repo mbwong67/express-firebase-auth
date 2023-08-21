@@ -5,6 +5,7 @@ import bodyParser from "body-parser";
 // app
 import config from './src/config';
 import auth from './src/controller/auth';
+import {requestLogger} from "./src/middleware";
 
 const app = express();
 
@@ -12,6 +13,7 @@ const appEnv = config.appEnv;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(requestLogger);
 
 // import routes
 app.use('/api/v1/auth', auth);

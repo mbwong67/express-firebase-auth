@@ -1,28 +1,58 @@
 import {db} from '../utils';
+import {addDoc, collection, deleteDoc, doc, getDocs, updateDoc, getDoc, query, where, limit} from 'firebase/firestore';
 
-const userCollection = db.collection('users');
+const userCollection = collection(db, 'users');
 
-const createUser = async (user) => {
-    const userRef = await userCollection.add(user);
-    return userRef.id;
+const createUser = async (data) => {
+    const docRef = await addDoc(userCollection, data);
+    return {
+        id: docRef.id,
+        ...data
+    };
 }
 
 const getUser = async (id) => {
-    const userRef = await userCollection.doc(id).get();
-    return userRef.data();
+    const userRef = doc(db, 'users', id);
+    const userSnap = await getDoc(userRef);
+
+    if (userSnap.exists()){
+        return {
+            id: userSnap.id,
+            ...userSnap.data()
+        }
+    }
 }
 
-const getUsers = async () => {
-    const userRef = await userCollection.get();
-    return userRef.docs.map((doc) => ({id: doc.id, ...doc.data()}));
+const getUserByEmail = async (email) => {
+    const q = query(userCollection, where("email", "==", email), limit(1));
+
+    const querySnapshot = await getDocs(q);
+
+    if (querySnapshot.empty) {
+        return null;
+    }
+
+    return {
+        id: querySnapshot.docs[0].id,
+        ...querySnapshot.docs[0].data()
+    };
 }
 
-const updateUser = async (id, user) => {
-    return await userCollection.doc(id).update(user);
+const updateUser = async (id, data) => {
+    const docRef = doc(db, 'users', id);
+    return await updateDoc(docRef, data);
 }
 
 const deleteUser = async (id) => {
-    return await userCollection.doc(id).delete();
+    const docRef = doc(db, 'users', id);
+    const docSnap = await deleteDoc(docRef);
+    return docSnap.data();
+}
+
+const getUsers = async () => {
+    const docRef = await getDocs(userCollection);
+
+    return docRef.docs.map((doc) => ({id: doc.id, ...doc.data()}));
 }
 
 module.exports = {
@@ -31,4 +61,5 @@ module.exports = {
     updateUser,
     deleteUser,
     getUsers,
+    getUserByEmail,
 }
