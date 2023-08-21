@@ -1,0 +1,3 @@
+[32m{"body":{},"ip":"::1","level":"info","message":"Method: GET | URL: / | IP: ::1","timestamp":"2023-08-21T23:34:43.025Z"}[39m
+[31m{"level":"error","message":"halo","timestamp":"2023-08-21T23:34:43.028Z"}[39m
+[32m{"body":{},"ip":"::1","level":"info","message":"Method: GET | URL: /favicon.ico | IP: ::1","timestamp":"2023-08-21T23:34:43.098Z"}[39m
