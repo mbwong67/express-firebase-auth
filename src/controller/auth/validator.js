@@ -4,7 +4,7 @@ module.exports = {
     registerValidation: (data, options) => {
         const schema = joi.object({
             name: joi.string().min(6).required(),
-            email: joi.string().min(6).required().email(),
+            username: joi.string().min(6).required(),
             password: joi.string().min(6).required(),
             repeat_password: joi.ref('password'),
         }).with('password', 'repeat_password');
@@ -13,7 +13,7 @@ module.exports = {
     },
     loginValidation: (data, options) => {
         const schema = joi.object({
-            email: joi.string().min(6).required().email(),
+            username: joi.string().min(6).required(),
             password: joi.string().min(6).required(),
         })
 

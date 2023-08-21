@@ -1,24 +1,24 @@
 module.exports = {
     get: {
-        '/users': {
-            roles: ['admin', 'user']
+        '/api/users': {
+            roles: ['admin', 'member']
         },
-        '/users/:id': {
-            roles: ['admin', 'user']
+        '/api/users/:id': {
+            roles: ['admin', 'member']
         },
     },
     post: {
-        '/users': {
+        '/api/users/': {
             roles: ['admin']
         }
     },
     put: {
-        '/users/:id': {
-            roles: ['admin', 'user']
+        '/api/users/:id': {
+            roles: ['admin']
         }
     },
     delete: {
-        '/users/:id': {
+        '/api/users/:id': {
             roles: ['admin']
         }
     }

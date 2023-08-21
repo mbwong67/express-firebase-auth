@@ -5,10 +5,11 @@ import {userPolicies} from "../policies";
 
 module.exports = {
     checkAuth: (req, res, next) => {
-        const token = req.headers.authorization;
-        if (!token) {
+        const authHeader = req.headers.authorization || '';
+        if (!authHeader) {
             return response.error(res, errors.unauthorizedError());
         }
+        const token = authHeader.split(' ')[1];
 
         try {
             req.user = jwt.verify(token);
@@ -19,9 +20,10 @@ module.exports = {
     },
     checkPermission: (req, res, next) => {
         const user = req.user;
-        const path = req.route.path;
+        const path = req.baseUrl + req.route.path;
         const method = req.method.toLowerCase();
         const policy = userPolicies[method][path];
+
         if (!policy) {
             return response.error(res, errors.notFoundError());
         }

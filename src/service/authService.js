@@ -1,14 +1,14 @@
 import {userCollection} from '../collection';
 import {jwt} from '../utils';
 import bcrypt from 'bcrypt';
-import config from '../config';
-import moment from 'moment';
+import userService from './userService';
 
 const signJwt = (user) => {
     return jwt.sign({
         id: user.id,
         email: user.email,
         name: user.name,
+        username: user.username,
         created_at: user.created_at,
         updated_at: user.updated_at,
         role: user.role
@@ -17,7 +17,7 @@ const signJwt = (user) => {
 
 module.exports = {
     login: async (data) => {
-        let user = await userCollection.getUserByEmail(data.email);
+        let user = await userCollection.getUserByUsername(data.username);
         if (user === null) {
             return null;
         }
@@ -36,18 +36,11 @@ module.exports = {
         }
     },
     register: async (data) => {
-        let user = await userCollection.getUserByEmail(data.email);
-        if (user !== null) {
+        let user = await userService.createUser(data)
+
+        if (user === null) {
             return null;
         }
-
-        data.password = bcrypt.hashSync(data.password, config.hashSalt);
-        data.created_at = moment().format('YYYY-MM-DD HH:mm:ss');
-        data.updated_at = data.created_at;
-        data.deleted_at = null
-        data.role = "member"
-
-        user = await userCollection.createUser(data);
 
         let token = signJwt(user);
 

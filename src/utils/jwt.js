@@ -4,10 +4,15 @@ const secret = process.env.JWT_SECRET;
 
 const jwt = {
     sign: (payload) => {
-        return jsonwebtoken.sign(payload, secret, {expiresIn: 60 * 60 * 7, algorithm: 'HS256'});
+        return jsonwebtoken.sign(payload, secret, {expiresIn: 60 * 60 * 7});
     },
     verify: (token) => {
-        return jsonwebtoken.verify(token, secret);
+        return jsonwebtoken.verify(token, secret, (err, decoded) => {
+            if (err) {
+                throw new Error(err.message);
+            }
+            return decoded;
+        });
     }
 }
 

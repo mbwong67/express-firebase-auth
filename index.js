@@ -5,6 +5,7 @@ import bodyParser from "body-parser";
 // app
 import config from './src/config';
 import auth from './src/controller/auth';
+import users from './src/controller/users';
 import {requestLogger} from "./src/middleware";
 
 const app = express();
@@ -16,7 +17,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(requestLogger);
 
 // import routes
-app.use('/api/v1/auth', auth);
+app.use('/api/auth', auth);
+app.use('/api/users', users);
 
 app.get('/', (req, res) => {
     res.send('halo');

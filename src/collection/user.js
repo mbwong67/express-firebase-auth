@@ -11,20 +11,26 @@ const createUser = async (data) => {
     };
 }
 
-const getUser = async (id) => {
+const getUserById = async (id) => {
     const userRef = doc(db, 'users', id);
     const userSnap = await getDoc(userRef);
 
-    if (userSnap.exists()){
-        return {
-            id: userSnap.id,
-            ...userSnap.data()
-        }
+    if (!userSnap.exists()){
+        return null
+    }
+
+    if (userSnap.data().deleted_at !== null) {
+        return null
+    }
+
+    return {
+        id: userSnap.id,
+        ...userSnap.data()
     }
 }
 
-const getUserByEmail = async (email) => {
-    const q = query(userCollection, where("email", "==", email), limit(1));
+const getUserByUsername = async (username) => {
+    const q = query(userCollection, where("username", "==", username), where("deleted_at", "==", null), limit(1));
 
     const querySnapshot = await getDocs(q);
 
@@ -40,26 +46,30 @@ const getUserByEmail = async (email) => {
 
 const updateUser = async (id, data) => {
     const docRef = doc(db, 'users', id);
-    return await updateDoc(docRef, data);
+    return await updateDoc(docRef, data).then(() => {
+        return true;
+    }).catch((error) => {
+        console.error("Error updating document: ", error);
+        return false;
+    });
 }
 
-const deleteUser = async (id) => {
-    const docRef = doc(db, 'users', id);
-    const docSnap = await deleteDoc(docRef);
-    return docSnap.data();
-}
+const getUsers = async (limitCount = 20) => {
+    const q = query(userCollection, where("deleted_at", "==", null), limit(limitCount));
 
-const getUsers = async () => {
-    const docRef = await getDocs(userCollection);
+    const querySnapshot = await getDocs(q);
 
-    return docRef.docs.map((doc) => ({id: doc.id, ...doc.data()}));
+    if (querySnapshot.empty) {
+        return null;
+    }
+
+    return querySnapshot.docs.map((doc) => ({id: doc.id, ...doc.data()}));
 }
 
 module.exports = {
     createUser,
-    getUser,
+    getUserById,
+    getUserByUsername,
     updateUser,
-    deleteUser,
     getUsers,
-    getUserByEmail,
 }

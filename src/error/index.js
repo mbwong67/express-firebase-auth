@@ -14,6 +14,13 @@ module.exports = {
             errors: errors.details.map(e => e.message)
         }
     },
+    badRequestError: (errors) => {
+        return {
+            code: 400,
+            status: 'bad request',
+            errors: errors
+        }
+    },
     unauthorizedError: () => {
         return {
             code: 401,
