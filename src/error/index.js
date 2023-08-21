@@ -19,5 +19,17 @@ module.exports = {
             code: 401,
             status: 'unauthorized',
         }
+    },
+    notFoundError: () => {
+        return {
+            code: 404,
+            status: 'not found',
+        }
+    },
+    forbiddenError: () => {
+        return {
+            code: 403,
+            status: 'forbidden',
+        }
     }
 }

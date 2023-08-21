@@ -20,7 +20,9 @@ module.exports = {
             user: {
                 email: data.email,
                 name: data.name,
-                id: data.id
+                id: data.id,
+                created_at: data.created_at,
+                updated_at: data.updated_at
             },
             expires_in: 60 * 60 * 7,
             token: data.token
@@ -44,7 +46,10 @@ module.exports = {
             user: {
                 email: data.email,
                 name: data.name,
-                id: data.id
+                id: data.id,
+                created_at: data.created_at,
+                updated_at: data.updated_at,
+                role: data.role
             },
             expires_in: 60 * 60 * 7,
             token: data.token
