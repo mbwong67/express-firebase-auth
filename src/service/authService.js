@@ -2,6 +2,7 @@ import {userCollection} from '../collection';
 import {jwt} from '../utils';
 import bcrypt from 'bcrypt';
 import userService from './userService';
+import moment from "moment/moment";
 
 const signJwt = (user) => {
     return jwt.sign({
@@ -48,5 +49,8 @@ module.exports = {
             token: token,
             ...user
         };
+    },
+    me: async (user) => {
+        return await userCollection.getUserById(user.id);
     }
 }

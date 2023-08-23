@@ -1,5 +1,5 @@
 import {db} from '../utils';
-import {addDoc, collection, deleteDoc, doc, getDocs, updateDoc, getDoc, query, where, limit} from 'firebase/firestore';
+import {addDoc, collection, doc, getDocs, updateDoc, getDoc, query, where, limit} from 'firebase/firestore';
 
 const userCollection = collection(db, 'users');
 
@@ -54,9 +54,8 @@ const updateUser = async (id, data) => {
     });
 }
 
-const getUsers = async (limitCount = 20) => {
-    const q = query(userCollection, where("deleted_at", "==", null), limit(limitCount));
-
+const getUsers = async () => {
+    const q = query(userCollection, where("deleted_at", "==", null));
     const querySnapshot = await getDocs(q);
 
     if (querySnapshot.empty) {

@@ -7,5 +7,6 @@ const router = express.Router();
 
 router.post('/login', middlewares.validate(validator.loginValidation), handlers.login);
 router.post('/register', middlewares.validate(validator.registerValidation), handlers.register);
+router.get('/me', middlewares.checkAuth, handlers.me);
 
 module.exports = router;

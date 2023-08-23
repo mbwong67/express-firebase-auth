@@ -2,6 +2,17 @@ import response from '../../response'
 import {authService} from '../../service'
 import errors from '../../error'
 
+const userDto = (user) => {
+    return {
+        id: user.id,
+        name: user.name,
+        username: user.username,
+        created_at: user.created_at,
+        updated_at: user.updated_at,
+        role: user.role
+    }
+}
+
 module.exports = {
     login: async (req, res, next) => {
         let user = await authService.login({
@@ -55,5 +66,13 @@ module.exports = {
             expires_in: 60 * 60 * 7,
             token: data.token
         })
+    },
+    me: async (req, res, next) => {
+        let user = await authService.me(req.user)
+        if (user === null) {
+            return response.error(res, errors.unauthorizedError())
+        }
+
+        return response.success(res, userDto(user))
     }
 }
