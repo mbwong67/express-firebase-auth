@@ -1,4 +1,4 @@
-# mobile subscription
+# express firebase auth
 
 ## Installation
 1. Clone Project
